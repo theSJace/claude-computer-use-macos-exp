@@ -12,12 +12,12 @@ from anthropic import APIResponse
 
 async def main():
     # Set up your Anthropic API key and model
-    api_key = os.getenv("ANTHROPIC_API_KEY", "YOUR_API_KEY_HERE")
-    if api_key == "YOUR_API_KEY_HERE":
-        raise ValueError(
-            "Please first set your API key in the ANTHROPIC_API_KEY environment variable"
-        )
-    provider = APIProvider.ANTHROPIC
+    api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    # if api_key == "YOUR_API_KEY_HERE":
+    #     raise ValueError(
+    #         "Please first set your API key in the ANTHROPIC_API_KEY environment variable"
+    #     )
+    provider = APIProvider.BEDROCK
 
     # Check if the instruction is provided via command line arguments
     if len(sys.argv) > 1:

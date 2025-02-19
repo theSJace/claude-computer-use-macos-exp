@@ -60,7 +60,6 @@ SYSTEM_PROMPT = f"""<SYSTEM_CAPABILITY>
 * If the item you are looking at is a PDF, and after taking a single screenshot of the PDF it seems you want to read the entire document, instead of trying to continue to read the PDF from your screenshots and navigation, determine the URL, use `curl` to download the PDF, install and use `pdftotext` (you may need to install it via `brew install poppler`) to convert it to a text file, and then read that text file directly with your `str_replace_editor` tool.
 </IMPORTANT>"""
 
-
 async def sampling_loop(
     *,
     model: str,
@@ -95,16 +94,23 @@ async def sampling_loop(
         elif provider == APIProvider.VERTEX:
             client = AnthropicVertex()
         elif provider == APIProvider.BEDROCK:
-            client = AnthropicBedrock()
+            client = AnthropicBedrock(
+                    aws_access_key="",
+                    aws_secret_key="",
+                    aws_region="us-west-2"
+            )
+
+        
 
         # Call the API
         # we use raw_response to provide debug information to streamlit. Your
         # implementation may be able call the SDK directly with:
         # `response = client.messages.create(...)` instead.
         raw_response = client.beta.messages.with_raw_response.create(
+            model="anthropic.claude-3-5-sonnet-20241022-v2:0",
             max_tokens=max_tokens,
             messages=messages,
-            model=model,
+            # model=model,
             system=system,
             tools=tool_collection.to_params(),
             betas=["computer-use-2024-10-22"],
